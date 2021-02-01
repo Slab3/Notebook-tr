@@ -32,8 +32,8 @@ newItem.addEventListener("click", function() {
 
 function createNote() {
     let li = document.createElement("li");
-    li.classList.add("noteItem");
-    li.classList.add("itemList");
+    li.classList.add("note-item");
+    li.classList.add("item-list");
     li.setAttribute("item-id", counter);
 
 
@@ -68,6 +68,7 @@ function createNoteTitle(value) {
     title.classList.add("title");
 
     let titleInput = document.createElement("input");
+    titleInput.classList.add("title-input");
     titleInput.setAttribute("type", 'text');
     titleInput.setAttribute("item-id", counter);
     titleInput.setAttribute("placeholder", 'Title');
@@ -80,7 +81,8 @@ function createNoteTitle(value) {
 
 function createNoteItem() {
     let item = document.createElement("div");
-    item.classList.add("note-item");
+    item.classList.add("note-list-item");
+    item.classList.add("checkbox-block"); // -===============
 
     let itemCheckbox = document.createElement("input");
     itemCheckbox.setAttribute("type", 'checkbox');
@@ -88,6 +90,7 @@ function createNoteItem() {
     item.append(itemCheckbox);
 
     let itemInput = document.createElement("input");
+    itemInput.classList.add("list-item-input"); // -=================
     itemInput.setAttribute("type", 'text');
     itemInput.setAttribute("placeholder", 'Add note');
     itemInput.setAttribute("item-id", counter);
@@ -112,6 +115,9 @@ function onNoteInputKeyPress(e) {
     }
 }
 
+
+
+// =========================== trash
 // let note = new Note();
 // note.title = "note test";
 //

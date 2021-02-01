@@ -1,5 +1,5 @@
-.mainSection {}
-.inputSearchField {
+.main-section {}
+.input-search-field {
   margin: 0 auto;
   text-align: center;
 
@@ -18,7 +18,7 @@
   }
 
 }
-.notesBlock {
+.notes-block {
 
   .notes {
     display: flex;
@@ -26,8 +26,9 @@
     justify-content: center;
   }
 
-  .addItem, .noteItem {width: 230px;}
-  .noteItem {
+  .add-item, .note-item {width: 230px;}
+  .note-item {
+    justify-content: center;
     background: #cefff5;
     border-radius: 8px;
     min-height: 50px;
@@ -38,13 +39,13 @@
     }
 
     input {
-      background: #cefff5;
+      background: transparent;
       border: none;
       outline: none;
       outline: 0;
     }
   }
-  .addItem {
+  .add-item {
     border: 4px solid #4588f9;
     color: #4588f9;
     border-radius: 4px;
@@ -62,8 +63,25 @@
   }
 
 }
+// title from item
+.title {
+  padding: 0 10px;
+}
+.title-input {
+  font-weight: 600;
+}
 
+// checkbox block
+.checkbox-block {
+  padding: 10px;
+  display: flex;
+  background: transparent;
+}
+.list-item-input {
+  padding: 0 10px;
+  width: 100%;
+}
 
-.itemList {
-  margin: 10px 10px 0 10px;
+.item-list {
+  margin: 10px;
 }

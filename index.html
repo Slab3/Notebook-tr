@@ -16,22 +16,27 @@
     <h2>Notebook</h2>
 </header>
 
-<section class="container mainSection">
-    <div class="inputSearchField">
+<section class="container main-section">
+    <div class="input-search-field">
         <input id="search" type="text" autocomplete="off" placeholder="Take a note...">
     </div>
 
-    <div class="notesBlock">
+    <div class="notes-block">
         <ul class="notes" id="notes">
-            <li class="noteItem itemList">
-                <h3>Заголовок</h3>
-                <p>any text random text any text random text any text random text any text random text</p>
+            <li class="note-item item-list" item-id="1">
+                <span class="title">
+                    <input type="text" item-id="1" placeholder="Title">
+                </span>
+                <span class="body" item-id="1">
+                    <div class="note-list-item checkbox-block">
+                        <input type="checkbox" item-id="1">
+                        <input class="list-item-input" type="text" placeholder="Add note" item-id="1">
+                    </div>
+                </span>
             </li>
-            <li class="noteItem itemList">
 
-            </li>
                 <!-- Button add new -->
-            <li class="addItem itemList" id="addItem">
+            <li class="add-item item-list" id="addItem">
                 <p class="plus">+</p>
                 <p class="addNew">Add New</p>
             </li>
