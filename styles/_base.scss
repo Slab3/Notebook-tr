@@ -1,0 +1,38 @@
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+
+ul {padding: 0;}
+li {list-style: none}
+p, h1, h2, h3, h4, ul, body, button {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  box-sizing: border-box;
+}
+
+a, a:hover {
+  color: #000000;
+  text-decoration: none;
+}
+
+.flex-elem {display: flex}
+
+.container {
+  width: 65%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
