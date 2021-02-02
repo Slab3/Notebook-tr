@@ -114,3 +114,23 @@
   cursor: pointer;
 
 }
+
+// add new item
+
+.block-add-textarea {
+  position: relative;
+}
+
+.add-textarea {
+  font-size: 14px;
+  width: 17px;
+  background-color: #a196d1;
+  border-radius: 5px;
+  color: white;
+  position: absolute;
+  text-align: center;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  cursor: pointer;
+}

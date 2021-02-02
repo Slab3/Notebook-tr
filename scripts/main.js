@@ -43,16 +43,15 @@
         li.setAttribute("item-id", counter);
 
 
-        // delete item test
-        let deleteBlock = document.createElement("div");
-        deleteBlock.classList.add("delete-block");
-        let deleteItem = document.createElement("span");
-        deleteItem.classList.add("delete-item");
-        deleteItem.setAttribute("id", "xxdivid");
-        deleteItem.innerText = "Х";
-        deleteBlock.append(deleteItem);
+        // delete item
+        let deleteBlock = deleteNoteItem();
         li.append(deleteBlock);
 
+        // add textarea
+        let blockAddTextarea = addNoteTextarea();
+        li.append(blockAddTextarea);
+
+        // title, note text
         let title = createNoteTitle();
         li.append(title);
 
@@ -65,8 +64,6 @@
 
         li.append(body);
         notesBlock.append(li);
-
-
 
 
         // createNoteListeners(li);
@@ -116,6 +113,36 @@
 
         return item;
     }
+
+    //delete note item
+    function deleteNoteItem() {
+        let deleteBlock = document.createElement("div");
+        deleteBlock.classList.add("delete-block");
+        let deleteItem = document.createElement("span");
+        deleteItem.classList.add("delete-item");
+        // deleteItem.setAttribute("id", "deleteItem");
+        deleteItem.innerText = "Х";
+        deleteBlock.append(deleteItem);
+
+        return deleteBlock;
+    }
+
+    // add textarea
+    function addNoteTextarea() {
+        let blockAddTextarea = document.createElement("div");
+        blockAddTextarea.classList.add("block-add-textarea");
+        let addTextarea = document.createElement("span");
+        addTextarea.classList.add("add-textarea");
+        // addTextarea.setAttribute("id", "addItem");
+        addTextarea.innerText = "+";
+        blockAddTextarea.append(addTextarea);
+
+        return blockAddTextarea;
+    }
+
+
+
+
 
     // function onNoteInputKeyPress(e) {
     //     const keyEnter = "Enter";
