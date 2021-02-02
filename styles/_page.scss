@@ -28,21 +28,28 @@
 
   .add-item, .note-item {width: 230px;}
   .note-item {
-    justify-content: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     background: #cefff5;
     border-radius: 8px;
     min-height: 50px;
     height: 100%;
     padding: 10px;
+    &:hover {
+      .delete-item { //making delete button visible
+        opacity: 1;
+      }
+    }
+
     h3 {
       font-size: 16px;
     }
 
-    input {
+    input, textarea {
       background: transparent;
       border: none;
       outline: none;
       outline: 0;
+      resize: none;
     }
   }
   .add-item {
@@ -65,15 +72,17 @@
 }
 // title from item
 .title {
-  padding: 0 10px;
+  padding: 0 15px;
+
 }
-.title-input {
+.title-input { // textarea
   font-weight: 600;
+
 }
 
 // checkbox block
 .checkbox-block {
-  padding: 10px;
+  padding: 5px 15px;
   display: flex;
   background: transparent;
 }
@@ -84,4 +93,24 @@
 
 .item-list {
   margin: 10px;
+}
+
+// delete item
+
+.delete-block {
+  position: relative;
+}
+.delete-item {
+  font-size: 14px;
+  width: 17px;
+  background-color: #d1766f;
+  border-radius: 5px;
+  color: white;
+  position: absolute;
+  text-align: center;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+
 }
