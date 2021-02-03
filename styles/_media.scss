@@ -57,10 +57,17 @@
     .add-item, .note-item {
       width: 240px;
     }
+    .note-item {
+      z-index: 1;
+      &:last-child {
+        margin-bottom: 140px;
+      }
+    }
     .add-item {
-      position: fixed;
-      bottom: 0;
+      //position: fixed;
+      //bottom: 0;
       height: 100px;
+      z-index: 2;
       .plus {
         font-size: 48px;
       }

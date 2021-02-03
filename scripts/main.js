@@ -2,11 +2,38 @@
     const search = document.getElementById("search");
     const newItem = document.getElementById("addItem");
     const notesBlock = document.getElementById("notes");
+
+    //search
+    //test search:
+    let testSearchs = document.querySelectorAll(".test-search");
+
+    let noteItems = document.querySelectorAll(".note-item");
+
+    search.addEventListener("keyup", function() {
+
+        Array.prototype.forEach.call(testSearchs, function(el) {
+            if (el.textContent.trim().indexOf(search.value) > -1)
+                el.style.display = 'block';
+            else el.style.display = 'none';
+        });
+
+    });
+    // test search
+
     let counter = 0;
 
-    const colors = {
-        red: createNote
-    }
+
+    // masonry
+    let msnry = new Masonry( notesBlock, {
+        // options
+        itemSelector: '.item-list',
+        columnWidth: '.item-list',
+        gutter: 10,
+    });
+
+    // const colors = {
+    //     red: createNote
+    // }
 
     // создать class note, и в него записать все данные о карточке , а потом его можно сохранить целиком в localstorage
     let notes = {};
@@ -33,29 +60,24 @@
         counter++;
         notes[counter] = new Note();
         createNote();
+        console.log(`Note with id ${counter} created!`)
     });
 
-
     function createNote() {
-        let li = document.createElement("li");
+        let li = document.createElement("div");
         li.classList.add("note-item");
         li.classList.add("item-list");
         li.setAttribute("item-id", counter);
-
 
         // delete item
         let deleteBlock = deleteNoteItem();
         li.append(deleteBlock);
 
-        // add textarea
-        let blockAddTextarea = addNoteTextarea();
-        li.append(blockAddTextarea);
-
         // title, note text
         let title = createNoteTitle();
         li.append(title);
 
-        let body = document.createElement("span");
+        let body = document.createElement("div");
         body.classList.add("body");
         body.setAttribute("item-id", counter);
 
@@ -65,12 +87,33 @@
         li.append(body);
         notesBlock.append(li);
 
+        let addNewItem = createAddNewItemButton();
+        li.append(addNewItem);
 
-        // createNoteListeners(li);
+        msnry.appended(li);
+        msnry.layout();
+    }
+
+    // creating new item textarea and checkbox in div.body
+    function createAddNewItemButton() {
+        let addRowWrapper = document.createElement("div");
+        addRowWrapper.classList.add("block-add-textarea");
+        let button = document.createElement("button");
+        button.classList.add("add-textarea");
+        button.innerText = "+";
+
+        button.addEventListener("click", function () { //====================-------- append undefined
+            let item = createNoteItem();
+            this.closest('.note-item').querySelector('.body').append(item);
+            msnry.layout();
+        });
+
+        addRowWrapper.append(button);
+        return addRowWrapper;
     }
 
 
-
+    //create title textarea
     function createNoteTitle(value) {
         value = value || "";
 
@@ -84,6 +127,9 @@
         titleInput.setAttribute("placeholder", 'Title');
         titleInput.setAttribute("maxlength", '50');
         autosize(titleInput);
+        titleInput.addEventListener('autosize:resized', function(){
+            msnry.layout();
+        });
         titleInput.value = value;
 
 
@@ -92,6 +138,7 @@
         return title;
     }
 
+    // create note item textarea
     function createNoteItem() {
         let item = document.createElement("div");
         item.classList.add("note-list-item");
@@ -100,6 +147,8 @@
         let itemCheckbox = document.createElement("input");
         itemCheckbox.setAttribute("type", 'checkbox');
         itemCheckbox.setAttribute("item-id", counter);
+        itemCheckbox.setAttribute("status", "false");
+
         item.append(itemCheckbox);
 
 
@@ -109,6 +158,9 @@
         itemInput.setAttribute("item-id", counter);
         itemInput.setAttribute("maxlength", "2000");
         autosize(itemInput);
+        itemInput.addEventListener('autosize:resized', function(){
+            msnry.layout();
+        });
         item.append(itemInput);
 
         return item;
@@ -120,29 +172,24 @@
         deleteBlock.classList.add("delete-block");
         let deleteItem = document.createElement("span");
         deleteItem.classList.add("delete-item");
-        // deleteItem.setAttribute("id", "deleteItem");
+        deleteItem.setAttribute("item-id", counter);
         deleteItem.innerText = "Х";
         deleteBlock.append(deleteItem);
+
+        deleteBlock.addEventListener("click", function () {
+            this.closest('div.note-item').remove();
+            console.log(`Note removed!`)
+            msnry.layout();
+        });
+
 
         return deleteBlock;
     }
 
-    // add textarea
-    function addNoteTextarea() {
-        let blockAddTextarea = document.createElement("div");
-        blockAddTextarea.classList.add("block-add-textarea");
-        let addTextarea = document.createElement("span");
-        addTextarea.classList.add("add-textarea");
-        // addTextarea.setAttribute("id", "addItem");
-        addTextarea.innerText = "+";
-        blockAddTextarea.append(addTextarea);
-
-        return blockAddTextarea;
-    }
 
 
 
-
+    // creating element
 
     // function onNoteInputKeyPress(e) {
     //     const keyEnter = "Enter";
@@ -208,4 +255,5 @@
     //     console.log("-test end");
     //     }, false);
 
-})();
+})(); // end of main function
+

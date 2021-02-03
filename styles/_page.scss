@@ -21,21 +21,25 @@
 .notes-block {
 
   .notes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    margin: 0 auto;
   }
 
-  .add-item, .note-item {width: 230px;}
+  .add-item, .note-item {
+    width: calc(30% - 10px);
+    margin-bottom: 10px;
+  }
+
   .note-item {
+    position: relative;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     background: #cefff5;
     border-radius: 8px;
-    min-height: 50px;
-    height: 100%;
     padding: 10px;
     &:hover {
       .delete-item { //making delete button visible
+        opacity: 1;
+      }
+      .add-textarea {
         opacity: 1;
       }
     }
@@ -43,7 +47,10 @@
     h3 {
       font-size: 16px;
     }
-
+    .body {
+      display: block;
+      margin: 10px 0;
+    }
     input, textarea {
       background: transparent;
       border: none;
@@ -57,9 +64,9 @@
     color: #4588f9;
     border-radius: 4px;
     cursor: pointer;
-    height: 170px;
     text-align: center;
     padding-bottom: 10px;
+
 
     .plus {font-size: 108px;}
   }
@@ -95,42 +102,42 @@
   margin: 10px;
 }
 
-// delete item
+// buttons delete & add item of note
 
-.delete-block {
-  position: relative;
-}
-.delete-item {
+.delete-item, .add-textarea {
   font-size: 14px;
-  width: 17px;
-  background-color: #d1766f;
   border-radius: 5px;
   color: white;
-  position: absolute;
   text-align: center;
-  right: 0;
-  top: 0;
   opacity: 0;
   cursor: pointer;
+  transition: .2s;
+}
 
+// delete item
+.delete-block {
+  position: absolute;
+  right: 10px;
+}
+.delete-item {
+  background-color: #d1766f;
+  padding: 0 4px;
+  &:hover {
+    background-color: #b96460;
+  }
 }
 
 // add new item
-
 .block-add-textarea {
-  position: relative;
-}
-
-.add-textarea {
-  font-size: 14px;
-  width: 17px;
-  background-color: #a196d1;
-  border-radius: 5px;
-  color: white;
-  position: absolute;
   text-align: center;
-  right: 0;
-  bottom: 0;
-  opacity: 1;
-  cursor: pointer;
+}
+.add-textarea {
+  width: 70%;
+  background-color: rgba(69, 136, 249, 0.9); //like an border of "add new" button
+  border: none;
+  outline: none;
+  &:hover {
+    background-color: rgba(69, 109, 219, 0.9);
+  }
+
 }

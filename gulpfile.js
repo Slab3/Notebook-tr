@@ -6,7 +6,11 @@ let sourcemaps = require('gulp-sourcemaps');
 
 
 gulp.task('js', function () {
-    return gulp.src(["scripts/**/*.js"])
+    return gulp.src([
+        "scripts/masonry.min.js",
+        "scripts/autosize.min.js",
+        "scripts/main.js"
+    ])
         .pipe(concat('main.js'))
         .pipe(gulp.dest("build"));
 });
