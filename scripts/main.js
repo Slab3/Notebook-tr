@@ -5,6 +5,7 @@
 
     let counter = 0;
 
+    // generating data from localstorage
     function generateData() {
         if (!localStorage.getItem('notes')) {
             return;
@@ -20,22 +21,37 @@
         }
     }
 
-    //search -=-------------------------------------------------------------------=
-    //test search:
-    let testSearchs = document.querySelectorAll(".test-search");
-
-    let noteItems = document.querySelectorAll(".note-item");
-
+    // search
     search.addEventListener("keyup", function() {
-
-        Array.prototype.forEach.call(testSearchs, function(el) {
-            if (el.textContent.trim().indexOf(search.value) > -1)
-                el.style.display = "block";
-            else el.style.display = "none";
-        });
-
+        for(let key in notes) {
+            let note = notes[key];
+            let noteElement = document.querySelector(`.note-item[note-id="${note.id}"]`);
+            if (!searchText(note, this.value)) {
+                noteElement.classList.add('hidden');
+            } else {
+                noteElement.classList.remove('hidden');
+            }
+            msnry.layout();
+        }
     });
-    // test search end
+
+    function searchText(note, value) {
+        let found = false;
+        if (note.title.indexOf(value) > -1) {
+            found = true;
+        }
+
+        let items = note.items;
+        for(let ikey in items) {
+            let item = items[ikey];
+
+            if (item.text.indexOf(value) > -1) {
+                found = true;
+            }
+        }
+        return found;
+    }
+    // search end
 
     // test colors
     // const colors = {
@@ -65,6 +81,7 @@
     }
 
     class Note {
+        id = 0;
         title = "";
         items = {};
         itemsCounter = 0;
@@ -84,6 +101,7 @@
         counter++;
         notes[counter] = new Note();
         notes[counter].title = title || "";
+        notes[counter].id = counter;
 
         let li = document.createElement("div");
         li.classList.add("note-item");
