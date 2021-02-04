@@ -122,7 +122,7 @@
   transition: .2s;
 }
 
-// delete item
+// delete Note
 .delete-block {
   position: absolute;
   right: 10px;
@@ -133,6 +133,10 @@
   &:hover {
     background-color: #b96460;
   }
+}
+// delete item note
+.delete-item-block {
+
 }
 
 // add new item

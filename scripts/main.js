@@ -5,7 +5,6 @@
 
     let counter = 0;
 
-    // generating data from localstorage
     function generateData() {
         if (!localStorage.getItem('notes')) {
             return;
@@ -21,7 +20,8 @@
         }
     }
 
-    // search
+    //search
+
     search.addEventListener("keyup", function() {
         for(let key in notes) {
             let note = notes[key];
@@ -51,7 +51,8 @@
         }
         return found;
     }
-    // search end
+
+    // test search end
 
     // test colors
     // const colors = {
@@ -157,6 +158,7 @@
             let noteObj = getNoteObj(this.closest(".note-item"));
             let item = createNoteItem(noteObj);
             this.closest(".note-item").querySelector(".body").append(item);
+            syncData()
             msnry.layout();
         });
 
