@@ -3,7 +3,24 @@
     const newItem = document.getElementById("addItem");
     const notesBlock = document.getElementById("notes");
 
-    //search
+    let counter = 0;
+
+    function generateData() {
+        if (!localStorage.getItem('notes')) {
+            return;
+        }
+
+        let _notes = JSON.parse(localStorage.getItem('notes'));
+        counter = Object.keys(_notes).length - 1;
+
+        console.log(_notes);
+
+        for(let key in _notes) {
+            createNote(_notes[key].title, _notes[key].items);
+        }
+    }
+
+    //search -=-------------------------------------------------------------------=
     //test search:
     let testSearchs = document.querySelectorAll(".test-search");
 
@@ -13,85 +30,101 @@
 
         Array.prototype.forEach.call(testSearchs, function(el) {
             if (el.textContent.trim().indexOf(search.value) > -1)
-                el.style.display = 'block';
-            else el.style.display = 'none';
+                el.style.display = "block";
+            else el.style.display = "none";
         });
 
     });
-    // test search
+    // test search end
 
-    let counter = 0;
+    // test colors
+    // const colors = {
+    //     red: createNote
+    // }
+    // -=--------------------------------------------------------------------------=
 
 
     // masonry
     let msnry = new Masonry( notesBlock, {
         // options
-        itemSelector: '.item-list',
-        columnWidth: '.item-list',
+        itemSelector: ".item-list",
+        columnWidth: ".item-list",
         gutter: 10,
     });
-
-    // const colors = {
-    //     red: createNote
-    // }
 
     // создать class note, и в него записать все данные о карточке , а потом его можно сохранить целиком в localstorage
     let notes = {};
 
     class Item {
         status = false;
-        body = "";
+        text = "";
 
-        constructor(body) {
-            this.body = body;
+        constructor(text) {
+            this.text = text;
         }
     }
 
     class Note {
         title = "";
-        items = [];
+        items = {};
+        itemsCounter = 0;
 
         search = (value) => {
 
         }
     }
 
+    generateData();
+
     newItem.addEventListener("click", function() {
-        counter++;
-        notes[counter] = new Note();
         createNote();
-        console.log(`Note with id ${counter} created!`)
     });
 
-    function createNote() {
+    function createNote(title, items) {
+        counter++;
+        notes[counter] = new Note();
+        notes[counter].title = title || "";
+
         let li = document.createElement("div");
         li.classList.add("note-item");
         li.classList.add("item-list");
-        li.setAttribute("item-id", counter);
+        li.setAttribute("note-id", counter);
 
         // delete item
-        let deleteBlock = deleteNoteItem();
+        let deleteBlock = createDeleteNoteItem();
         li.append(deleteBlock);
 
-        // title, note text
-        let title = createNoteTitle();
-        li.append(title);
+        // title
+        let noteTitle = createNoteTitle(title);
+        li.append(noteTitle);
 
         let body = document.createElement("div");
         body.classList.add("body");
-        body.setAttribute("item-id", counter);
+        body.setAttribute("note-id", counter);
 
-        let item = createNoteItem();
-        body.append(item);
+        // first item
+        if (items) {
+            for(let key in items) {
+                let item = createNoteItem(notes[counter], items[key]);
+                body.append(item);
+            }
+        } else {
+            let item = createNoteItem(notes[counter]);
+            body.append(item);
+        }
 
         li.append(body);
         notesBlock.append(li);
 
+        // add new button
         let addNewItem = createAddNewItemButton();
         li.append(addNewItem);
 
         msnry.appended(li);
         msnry.layout();
+
+        syncData();
+        console.log(`Note with id ${counter} created!`);
     }
 
     // creating new item textarea and checkbox in div.body
@@ -103,8 +136,9 @@
         button.innerText = "+";
 
         button.addEventListener("click", function () { //====================-------- append undefined
-            let item = createNoteItem();
-            this.closest('.note-item').querySelector('.body').append(item);
+            let noteObj = getNoteObj(this.closest(".note-item"));
+            let item = createNoteItem(noteObj);
+            this.closest(".note-item").querySelector(".body").append(item);
             msnry.layout();
         });
 
@@ -122,16 +156,25 @@
 
         let titleInput = document.createElement("textarea");
         titleInput.classList.add("title-input");
-        titleInput.setAttribute("type", 'text');
-        titleInput.setAttribute("item-id", counter);
-        titleInput.setAttribute("placeholder", 'Title');
-        titleInput.setAttribute("maxlength", '50');
+        titleInput.setAttribute("type", "text");
+        titleInput.setAttribute("note-id", counter);
+        titleInput.setAttribute("placeholder", "Title");
+        titleInput.setAttribute("maxlength", "50");
+
+        // Storage saving data title
+        titleInput.addEventListener("keyup", function () {
+            let note = getNoteObj(this);
+            note.title = this.value;
+            console.log(notes);
+
+            syncData();
+        });
+
         autosize(titleInput);
         titleInput.addEventListener('autosize:resized', function(){
             msnry.layout();
         });
         titleInput.value = value;
-
 
         title.append(titleInput);
 
@@ -139,24 +182,65 @@
     }
 
     // create note item textarea
-    function createNoteItem() {
+    function createNoteItem(noteObj, itemObj) {
+        // create item in note;
+        noteObj.items[noteObj.itemsCounter] = itemObj || new Item("");
+
         let item = document.createElement("div");
         item.classList.add("note-list-item");
-        item.classList.add("checkbox-block"); // -===============
+        item.classList.add("checkbox-block");
+        item.setAttribute("item-id", noteObj.itemsCounter);
 
         let itemCheckbox = document.createElement("input");
-        itemCheckbox.setAttribute("type", 'checkbox');
-        itemCheckbox.setAttribute("item-id", counter);
-        itemCheckbox.setAttribute("status", "false");
+        itemCheckbox.setAttribute("type", "checkbox");
+        itemCheckbox.setAttribute("note-id", counter);
+        itemCheckbox.setAttribute("item-id", noteObj.itemsCounter);
+
+        if (itemObj) {
+            itemCheckbox.checked = itemObj.status;
+            if (itemObj.status) {
+                item.classList.add("done")
+            }
+        }
+
+        // changing styles of
+        itemCheckbox.addEventListener("change", function () {
+            let noteId = this.getAttribute('note-id');
+            let itemId = this.getAttribute('item-id');
+
+            if (this.checked) {
+                this.closest('.note-list-item').classList.add('done');
+            } else {
+                this.closest('.note-list-item').classList.remove('done');
+            }
+            notes[noteId].items[itemId].status = this.checked;
+            syncData();
+        });
 
         item.append(itemCheckbox);
 
-
         let itemInput = document.createElement("textarea");
-        itemInput.classList.add("list-item-input"); // -=================
-        itemInput.setAttribute("placeholder", 'Add note');
-        itemInput.setAttribute("item-id", counter);
+        itemInput.classList.add("list-item-input");
+        itemInput.setAttribute("placeholder", "Add note");
+        itemInput.setAttribute("status", "false"); // -=-=-=-=-= testing line-through
+        itemInput.setAttribute("note-id", counter);
         itemInput.setAttribute("maxlength", "2000");
+        itemInput.setAttribute("item-id", noteObj.itemsCounter);
+
+        // itemInput test
+        if (itemObj) {
+            itemInput.value = itemObj.text;
+        }
+
+        noteObj.itemsCounter++;
+        // note item saving. if add new note, it will be with not correct id. (just need to see this for understand)
+        itemInput.addEventListener("keyup", function () {
+            let itemId = this.getAttribute("item-id");
+            noteObj.items[itemId].text = this.value;
+            syncData();
+            console.log(notes);
+        });
+
         autosize(itemInput);
         itemInput.addEventListener('autosize:resized', function(){
             msnry.layout();
@@ -166,94 +250,43 @@
         return item;
     }
 
-    //delete note item
-    function deleteNoteItem() {
-        let deleteBlock = document.createElement("div");
-        deleteBlock.classList.add("delete-block");
-        let deleteItem = document.createElement("span");
-        deleteItem.classList.add("delete-item");
-        deleteItem.setAttribute("item-id", counter);
-        deleteItem.innerText = "Х";
-        deleteBlock.append(deleteItem);
+    function createDeleteNoteItem() {
+        let deleteNoteBlock = document.createElement("div");
+        deleteNoteBlock.classList.add("delete-block");
+        let deleteNote = document.createElement("span");
+        deleteNote.classList.add("delete-item");
+        deleteNote.setAttribute("note-id", counter);
+        deleteNote.innerText = "Х";
+        deleteNoteBlock.append(deleteNote);
 
-        deleteBlock.addEventListener("click", function () {
-            this.closest('div.note-item').remove();
-            console.log(`Note removed!`)
+        deleteNote.addEventListener("click", function () {
+            deleteNoteObj(this);
+            this.closest("div.note-item").remove();
             msnry.layout();
+            syncData();
+
+            console.log(`Note removed!`)
         });
 
-
-        return deleteBlock;
+        return deleteNoteBlock;
     }
 
 
+    // save data in local storage
+    function syncData() {
+        localStorage.setItem("notes", JSON.stringify(notes));
+        console.log(notes);
+    }
 
+    function getNoteObj(el) {
+        let id = el.getAttribute("note-id");
+        return notes[id];
+    }
 
-    // creating element
-
-    // function onNoteInputKeyPress(e) {
-    //     const keyEnter = "Enter";
-    //     if (e.key === keyEnter) {
-    //         if (!this.value) {
-    //             return;
-    //         }
-    //         if (this.lastChild === "null") {
-    //             return;
-    //         }
-    //         let noteItem = createNoteItem();
-    //         let itemId = this.getAttribute("item-id");
-    //
-    //         console.log(itemId);
-    //
-    //         notes[itemId].items.push(new Item(this.value));
-    //         this.closest(".body").append(noteItem);
-    //
-    //         console.log(notes);
-    //     }
-    // }
-
-
-
-
-
-    // ========================= ------------------------------ == trash
-    // let note = new Note();
-    // note.title = "note test";
-    //
-    // note.items.push(new Item("item body"));
-    //
-    // notes.push(note);
-
-    // function pageLoaded () {
-    //
-    //     const ul = document.querySelector("ul.notes");
-    //
-    //
-    //
-    //     input.addEventListener("keypress", (keyPressed) => {
-    //         const keyEnter = 13;
-    //         if (keyPressed.which == keyEnter) {
-    //
-    //         }
-    //     });
-    //     // ul.addEventListener("click", onClickTodo)
-    // }
-
-
-
-    // // newItem.addEventListener("click", () => { alert("blah");}, false);
-    // newItem.addEventListener("click", function(){
-    //     console.log("-test start");
-    //     // const divEl = document.createElement("div");
-    //     // const textSpan = document.createElement("span");
-    //     // textSpan.classList.add("noteItem");
-    //     // const newTodo = search.value;
-    //     // textSpan.append(newTodo);
-    //
-    //     console.log(search.value); //search value in console. test
-    //
-    //     console.log("-test end");
-    //     }, false);
+    function deleteNoteObj(el) {
+        let id = el.getAttribute("note-id");
+        delete notes[id];
+    }
 
 })(); // end of main function
 

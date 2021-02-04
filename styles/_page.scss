@@ -59,6 +59,13 @@
       resize: none;
     }
   }
+
+  .note-list-item {
+    &.done textarea {
+      text-decoration: line-through;
+    }
+  }
+
   .add-item {
     border: 4px solid #4588f9;
     color: #4588f9;
@@ -66,14 +73,11 @@
     cursor: pointer;
     text-align: center;
     padding-bottom: 10px;
-
+    &:hover {
+      background-color: #eef6ff;
+    }
 
     .plus {font-size: 108px;}
-  }
-  span.todo-trash {
-    background: red;
-    height: 15px;
-    width: 15px;
   }
 
 }
