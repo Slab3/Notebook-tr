@@ -89,7 +89,8 @@
         items = {};
         color = "#DBE7FF";
         itemsCounter = 0;
-
+    //test date
+        date = "";
     }
 
     generateData();
@@ -111,6 +112,7 @@
             note.id = counter;
             note.title = "";
             note.color = generateColor();
+            note.date = new Date().toLocaleString();
             notes[note.id] = note;
         } else {
             notes[note.id] = note;
@@ -127,7 +129,7 @@
         li.append(deleteBlock);
 
         // title
-        let noteTitle = createNoteTitle(note.title);
+        let noteTitle = createNoteTitle(note);
         li.append(noteTitle);
 
         let body = document.createElement("div");
@@ -153,8 +155,8 @@
         li.append(addNewItem);
 
         // add Date
-        let addDateBlock = createAddDateField();
-        li.append(addDateBlock);
+        let dateBlock = createDateField(note);
+        li.append(dateBlock);
 
         msnry.appended(li);
         msnry.layout();
@@ -171,10 +173,11 @@
         button.classList.add("add-textarea");
         button.innerText = "+";
 
-        button.addEventListener("click", function () { //====================-------- append undefined
+        button.addEventListener("click", function () {
             let noteObj = getNoteObj(this.closest(".note-item"));
             let item = createNoteItem(noteObj);
             this.closest(".note-item").querySelector(".body").append(item);
+            syncDate(this.closest('.note-item'));
             syncData();
             msnry.layout();
         });
@@ -185,16 +188,14 @@
 
 
     //create title textarea
-    function createNoteTitle(value) {
-        value = value || "";
-
+    function createNoteTitle(note) {
         let title = document.createElement("span");
         title.classList.add("title");
 
         let titleInput = document.createElement("textarea");
         titleInput.classList.add("title-input");
         titleInput.setAttribute("type", "text");
-        titleInput.setAttribute("note-id", counter);
+        titleInput.setAttribute("note-id", note.id);
         titleInput.setAttribute("placeholder", "Title");
         titleInput.setAttribute("maxlength", "50");
 
@@ -202,16 +203,16 @@
         titleInput.addEventListener("keyup", function () {
             let note = getNoteObj(this);
             note.title = this.value;
-            console.log(notes);
-
+            syncDate(this);
             syncData();
+            console.log(notes);
         });
 
         autosize(titleInput);
         titleInput.addEventListener('autosize:resized', function(){
             msnry.layout();
         });
-        titleInput.value = value;
+        titleInput.value = note.title;
 
         title.append(titleInput);
 
@@ -278,6 +279,8 @@
         itemInput.addEventListener("keyup", function () {
             let itemId = this.getAttribute("item-id");
             noteObj.items[itemId].text = this.value;
+
+            syncDate(this);
             syncData();
             console.log(notes);
         });
@@ -312,33 +315,16 @@
         return deleteNoteBlock;
     }
 
-    function createAddDateField() {
-        // add date
-        let addDateBlock = document.createElement("div");
-        addDateBlock.classList.add("add-date-block");
-        let addDateField = document.createElement("span");
-        addDateField.classList.add("date-field");
-        addDateField.setAttribute("note-id", counter);
-        addDateField.innerText = "date-field";
-        addDateBlock.append(addDateField);
+    function createDateField(note) {
+        let dateBlock = document.createElement("div");
+        dateBlock.classList.add("add-date-block");
+        let dateField = document.createElement("span");
+        dateField.classList.add("date-field");
+        dateField.setAttribute("note-id", note.id);
+        dateField.innerText = note.date;
+        dateBlock.append(dateField);
 
-        // creating data
-        let dateOfPost = new Date();
-        addDateField.innerText = dateOfPost.toLocaleString();
-        // addDateField.innerText = dateOfPost.toDateString() + "; " + dateOfPost.toLocaleTimeString();
-
-
-
-        // addDateField.addEventListener("click", function () {
-        //     deleteNoteObj(this);
-        //     this.closest("div.note-item").remove();
-        //     msnry.layout();
-        //     syncData();
-        //
-        //     console.log(`Note removed!`)
-        // });
-
-        return addDateBlock;
+        return dateBlock;
     }
 
 
@@ -346,6 +332,17 @@
     function syncData() {
         localStorage.setItem("notes", JSON.stringify(notes));
         console.log(notes);
+    }
+
+    function syncDate(el) {
+        let now = new Date().toLocaleString();
+
+        let note = getNoteObj(el);
+        let noteEl = el.closest('.note-item');
+        let dateEl = noteEl.querySelector('.date-field');
+
+        note.date = now;
+        dateEl.innerText = now;
     }
 
     function getNoteObj(el) {
