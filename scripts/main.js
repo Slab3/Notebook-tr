@@ -7,7 +7,6 @@
     let counter = 0;
 
 
-    
     function generateData() {
         if (!localStorage.getItem("notes")) {
             return;
@@ -59,8 +58,6 @@
     function syncSearchStatus() {
         localStorage.setItem("search", search.value);
     }
-    // search end
-
 
     // masonry
     let msnry = new Masonry( notesBlock, {
@@ -70,7 +67,6 @@
         gutter: 10,
     });
 
-    // создать class note, и в него записать все данные о карточке , а потом его можно сохранить целиком в localstorage
     let notes = {};
 
     class Item {
@@ -275,7 +271,7 @@
         }
 
         noteObj.itemsCounter++;
-        // note item saving. if add new note, it will be with not correct id. (just need to see this for understand)
+
         itemInput.addEventListener("keyup", function () {
             let itemId = this.getAttribute("item-id");
             noteObj.items[itemId].text = this.value;
@@ -326,7 +322,6 @@
 
         return dateBlock;
     }
-
 
     // save data in local storage
     function syncData() {
