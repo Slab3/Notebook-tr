@@ -25,8 +25,8 @@
   }
 
   .add-item, .note-item {
-    width: calc(30% - 10px);
-    margin-bottom: 10px;
+    width: calc(32% - 10px);
+    margin-bottom: 20px;
   }
 
   .note-item {
@@ -103,10 +103,6 @@
 .list-item-input {
   padding: 0 10px;
   width: 100%;
-}
-
-.item-list {
-  margin: 10px;
 }
 
 // buttons delete & add item of note

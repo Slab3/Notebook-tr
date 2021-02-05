@@ -2,9 +2,7 @@
   .container {
     width: 75%;
   }
-  .notes {
 
-  }
 }
 
 @media all and (max-width: 1080px) {
@@ -19,7 +17,7 @@
   }
   .notes-block {
     .add-item, .note-item {
-      width: 205px;
+      //width: 205px;
     }
   }
 
@@ -31,7 +29,7 @@
   }
   .notes-block {
     .add-item, .note-item {
-      width: 190px;
+      //width: 190px;
     }
   }
 }
@@ -39,24 +37,22 @@
 @media all and (max-width: 745px) {
   .notes-block {
     .add-item, .note-item {
-      width: 230px;
+      width: calc(50% - 25px);
     }
   }
 }
 
 @media all and (max-width: 490px) {
   .notes-block {
+
     .add-item, .note-item {
-      width: 240px;
+      width: 100%;
     }
   }
 }
 
 @media all and (max-width: 330px) {
   .notes-block {
-    .add-item, .note-item {
-      width: 240px;
-    }
     .note-item {
       z-index: 1;
       &:last-child {

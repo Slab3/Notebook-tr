@@ -25,8 +25,8 @@ header {
   margin: 0 auto; }
 
 .notes-block .add-item, .notes-block .note-item {
-  width: calc(30% - 10px);
-  margin-bottom: 10px; }
+  width: calc(32% - 10px);
+  margin-bottom: 20px; }
 
 .notes-block .note-item {
   position: relative;
@@ -80,9 +80,6 @@ header {
 .list-item-input {
   padding: 0 10px;
   width: 100%; }
-
-.item-list {
-  margin: 10px; }
 
 .delete-item, .add-textarea {
   font-size: 14px;
@@ -171,27 +168,21 @@ a, a:hover {
 
 @media all and (max-width: 940px) {
   .container {
-    width: 90%; }
-  .notes-block .add-item, .notes-block .note-item {
-    width: 205px; } }
+    width: 90%; } }
 
 @media all and (max-width: 800px) {
   .container {
-    width: 95%; }
-  .notes-block .add-item, .notes-block .note-item {
-    width: 190px; } }
+    width: 95%; } }
 
 @media all and (max-width: 745px) {
   .notes-block .add-item, .notes-block .note-item {
-    width: 230px; } }
+    width: calc(50% - 25px); } }
 
 @media all and (max-width: 490px) {
   .notes-block .add-item, .notes-block .note-item {
-    width: 240px; } }
+    width: 100%; } }
 
 @media all and (max-width: 330px) {
-  .notes-block .add-item, .notes-block .note-item {
-    width: 240px; }
   .notes-block .note-item {
     z-index: 1; }
     .notes-block .note-item:last-child {
